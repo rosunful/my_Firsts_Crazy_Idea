@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mouse Tracker with Ball & Emotions</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+      transition: background-color 0.2s ease;
+    }
+
+    #ball {
+      position: fixed;
+      width: 200px;
+      height: 200px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      pointer-events: none; /* Prevent interaction */
+      transition: transform 0.1s ease;
+    }
+    
+    #ball {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50px;
+      height: 50px;
+      background-color: #cedcdf;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px rgba(0, 209, 255, 0.6);
+      z-index: -1;
+      transition: transform 0.08s ease-out; /* Smooth follow */
+      pointer-events: none; /* So it doesn't block mouse */
+}
+
+
+    .image-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 70px;
+      gap: 50px;
+      height: 100vh;
+    }
+
+    .image-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .image-box img {
+      width: 200px;
+      height: 300px;
+      object-fit:fit;
+      border-radius: 10px;
+    }
+
+    .emotion-label {
+      margin-top: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6),
+                   -1px -1px 2px rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .emotion-label.show {
+      opacity: 1;
+    }
+
+    #coords {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="ball"></div>
+
+  <div class="image-container">
+    <div class="image-box">
+      <img src="left_god.png" alt="Left Image" />
+      <div class="emotion-label" id="label-left">LUST</div>
+    </div>
+
+    <div class="image-box">
+      <img src="center.png" alt="Center Image" />
+      <div class="emotion-label" id="label-center">STUBBORN</div>
+    </div>
+
+    <div class="image-box">
+      <img src="right_god.png" alt="Right Image" />
+      <div class="emotion-label" id="label-right">ENVY</div>
+    </div>
+  </div>
+
+  
+
+ <script>
+  const body = document.body;
+  const ball = document.getElementById("ball");
+  const labelLeft = document.getElementById("label-left");
+  const labelCenter = document.getElementById("label-center");
+  const labelRight = document.getElementById("label-right");
+
+  document.addEventListener("mousemove", (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    const screenWidth = window.innerWidth;
+    const center = screenWidth / 2;
+
+    // Make ball follow mouse — keeping it centered on pointer
+    ball.style.transform = `translate(${x - 25}px, ${y - 25}px)`;
+
+    // Background and emotion label logic
+    if (x < center - 100) {
+      body.style.backgroundColor = "#73C2FB";
+      labelLeft.classList.add("show");
+      labelCenter.classList.remove("show");
+      labelRight.classList.remove("show");
+    } else if (x > center + 100) {
+      body.style.backgroundColor = "#EE204D";
+      labelLeft.classList.remove("show");
+      labelCenter.classList.remove("show");
+      labelRight.classList.add("show");
+    } else {
+      body.style.backgroundColor = "#121212";
+      labelLeft.classList.remove("show");
+      labelCenter.classList.add("show");
+      labelRight.classList.remove("show");
+    }
+  });
+
+  document.addEventListener("mouseleave", () => {
+    labelLeft.classList.remove("show");
+    labelCenter.classList.remove("show");
+    labelRight.classList.remove("show");
+    ball.style.transform = `translate(-50%, -50%)`; // reset to center
+  });
+</script>
+
+
+</body>
+</html>
